@@ -1,9 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
-	"encoding/json"
 	"log"
 	"net/http"
 	"time"
@@ -14,22 +14,21 @@ import (
 )
 
 var (
-	addr = flag.String("listen-address", ":1971", "The address to listen on for HTTP requests.")
-	location = flag.String("location", "Gelsted", "The location to ask weather data for.")
-	m_feels_like_c = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_feels_like_c"})
-	m_feels_like_f = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_feels_like_f"})
-	m_cloudcover = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_cloudcover"})
-	m_humidity = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_humidity"})
+	addr               = flag.String("listen-address", ":1971", "The address to listen on for HTTP requests.")
+	location           = flag.String("location", "Gelsted", "The location to ask weather data for.")
+	m_feels_like_c     = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_feels_like_c"})
+	m_feels_like_f     = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_feels_like_f"})
+	m_cloudcover       = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_cloudcover"})
+	m_humidity         = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_humidity"})
 	m_precipitation_mm = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_precipitation_mm"})
-	m_pressure_mbar = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_pressure_mbar"})
-	m_temp_c = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_temp_c"})
-	m_temp_f = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_temp_f"})
-	m_uv_index = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_uv_index"})
-	m_visibility = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_visibility"})
-	m_winddir_degree = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_winddir_degree"})
-	m_windspeed_kmph = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_windspeed_kmph"})
-	m_windspeed_miles = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_windspeed_miles"})
-
+	m_pressure_mbar    = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_pressure_mbar"})
+	m_temp_c           = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_temp_c"})
+	m_temp_f           = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_temp_f"})
+	m_uv_index         = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_uv_index"})
+	m_visibility       = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_visibility"})
+	m_winddir_degree   = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_winddir_degree"})
+	m_windspeed_kmph   = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_windspeed_kmph"})
+	m_windspeed_miles  = promauto.NewGauge(prometheus.GaugeOpts{Name: "wttr_windspeed_miles"})
 )
 
 func recordMetrics() {
@@ -49,7 +48,6 @@ func recordMetrics() {
 			}
 
 			currentCondition := jsonResp.CurrentCondition[0]
-
 
 			m_feels_like_c.Set(currentCondition.FeelsLikeC)
 			m_feels_like_f.Set(currentCondition.FeelsLikeF)
